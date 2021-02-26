@@ -1,0 +1,54 @@
+{% if type == 'block' %}
+  {% assign title = block.settings.title %}
+  {% assign frontpage_collection = block.settings.frontpage_collection %}
+  {% assign frontpage_products_per_row = block.settings.frontpage_products_per_row %}
+  {% assign frontpage_products_limit = block.settings.frontpage_products_limit %}
+{% else %}
+  {% assign title = section.settings.title %}
+  {% assign frontpage_collection = section.settings.frontpage_collection %}
+  {% assign frontpage_products_per_row = section.settings.frontpage_products_per_row %}
+  {% assign frontpage_products_limit = section.settings.frontpage_products_limit %}
+{% endif %}
+
+{% assign collection = collections[frontpage_collection] %}
+{% assign products = collection.products %}
+{% assign products_per_row = frontpage_products_per_row %}
+
+<div class="container">
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      {% if title != blank %}
+        <h2 class="section-header home text-align--center">
+          <a href="{{ collections[frontpage_collection].url }}">
+            {{ title | escape }}
+          </a>
+        </h2>
+      {% endif %}
+
+      {% if products.length > 0 %}
+        {% assign limit = frontpage_products_limit %}
+        {% include 'product-loop', limit: limit %}
+      {% else %}
+        {% assign limit = frontpage_products_limit %}
+        <div class="featured-collection--placeholder clearfix">
+          {% for i in (1..limit) %}
+            <div class="{% if products_per_row == 2 %} eight columns {% cycle 'alpha', 'omega' %}{% elsif products_per_row == 3 %} one-third column {% cycle 'alpha', '', 'omega' %}{% elsif products_per_row == 4 %} four columns {% cycle 'alpha', '', '', 'omega' %}{% endif %} thumbnail">
+              <a href="#">
+                <div class="relative product_image">
+                  {% capture num %}{% cycle "1", "2", "3" %}{% endcapture %}
+                  {{ 'collection-' | append: num | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
+                </div>
+                <div class="info">
+                  <span class="title">{{ 'homepage.onboarding.product_title' | t }}</span>
+                    <span class="price">
+                    <span class="money">$49.60</span>
+                  </span>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+{% if settings.twitter_link != '' %}
+  <a href="{{ settings.twitter_link }}" title="{{ shop.name }} on Twitter" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-twitter"></span>
+  </a>
+{% endif %}
+
+{% if settings.facebook_link != '' %}
+  <a href="{{ settings.facebook_link }}" title="{{ shop.name }} on Facebook" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-facebook"></span>
+  </a>
+{% endif %}
+
+{% if settings.youtube_link != '' %}
+  <a href="{{ settings.youtube_link }}" title="{{ shop.name }} on YouTube" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-youtube"></span>
+  </a>
+{% endif %}
+
+{% if settings.vimeo_link != '' %}
+  <a href="{{ settings.vimeo_link }}" title="{{ shop.name }} on Vimeo" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-vimeo"></span>
+  </a>
+{% endif %}
+
+{% if settings.pinterest_link != '' %}
+  <a href="{{ settings.pinterest_link }}" title="{{ shop.name }} on Pinterest" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-pinterest"></span>
+  </a>
+{% endif %}
+
+{% if settings.tumblr_link != '' %}
+  <a href="{{ settings.tumblr_link }}" title="{{ shop.name }} on Tumblr" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-tumblr"></span>
+  </a>
+{% endif %}
+
+{% if settings.instagram_link != '' %}
+  <a href="{{ settings.instagram_link }}" title="{{ shop.name }} on Instagram" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-instagram"></span>
+  </a>
+{% endif %}
+
+{% if settings.linkedin_link != '' %}
+  <a href="{{ settings.linkedin_link }}" title="{{ shop.name }} on LinkedIn" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-linkedin"></span>
+  </a>
+{% endif %}
+
+{% if settings.flickr_link != '' %}
+  <a href="{{ settings.flickr_link }}" title="{{ shop.name }} on Flickr" class="ss-icon" rel="me" target="_blank">
+    <span class="icon-flickr"></span>
+  </a>
+{% endif %}
+
+{% if settings.email_link != '' %}
+  <a href="mailto:{{ settings.email_link }}" title="Email {{ shop.name }}" class="ss-icon mail" target="_blank">
+    <span class="icon-mail"></span>
+  </a>
+{% endif %}

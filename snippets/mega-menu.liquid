@@ -1,0 +1,62 @@
+<div class="megaMenu js-megaMenu megaMenu-id-{{mega_id}} megaMenu-left">
+
+  <div class="megaMenu-grid-wrap">
+    <div class="megaMenu-grid js-megaMenu-grid" data-grid-size="{{ mega_menu.links.size }}">
+
+      {% if column_position == 'first_column' %}
+        {% if column_title != blank or column_text != blank or column_image != blank %}
+          {% include 'mega-menu-custom' %}
+        {% endif %}
+      {% endif %}
+
+      {% for sub_link in mega_menu.links %}
+        <div class="megaMenu-column">
+          <h3 class="megaMenu-subtitle {% if sub_link.links != blank %}js-megaMenu-dropdown{% endif %} {% if sub_link.url == 'http://' or sub_link.url == '' or sub_link.url == '/' or sub_link.url == 'https://' or sub_link.url == '#' %} parent-link--false {% else %} parent-link--true{% endif %}" data-sub-link="{{ sub_link.links.size }}">
+            <a class="{% if sub_link.active or sub_link.child_active %}active{% endif %}" {% unless sub_link.url == 'http://' or sub_link.url == '' or sub_link.url == '/' or sub_link.url == 'https://' or sub_link.url == '#' %}href="{{ sub_link.url }}" {% endunless %}>
+            {{ sub_link.title }}</a>{% if sub_link.links != blank %}&nbsp;<span class="icon-right-arrow arrow mega-sub-arrow menu-icon"></span>
+            {% endif %}
+          </h3>
+          {% if sub_link.links != blank %}
+            <div class="megaMenu-submenu">
+              {% for sub_sub_link in sub_link.links %}
+                {% if sub_sub_link.links != blank %}
+                  <div class="megaMenu-dropdown js-megaMenu-dropdown megaMenu-sublink-item {% if sub_sub_link.url == 'http://' or sub_sub_link.url == '' or sub_sub_link.url == '/' or sub_sub_link.url == 'https://' or sub_sub_link.url == '#' %} parent-link--false {% else %} parent-link--true{% endif %}">
+                    <a class="megaMenu-sublink {% if sub_sub_link.active or sub_sub_link.child_active %}active{% endif %}" {% unless sub_sub_link.url == 'http://' or sub_sub_link.url == '' or sub_sub_link.url == '/' or sub_sub_link.url == 'https://' or sub_sub_link.url == '#' %}href="{{ sub_sub_link.url }}" {% endunless %}>
+                    {{ sub_sub_link.title }}</a>{% if sub_sub_link.links != blank %}&nbsp;<span class="icon-right-arrow arrow mega-sub-arrow mega-sub-submenu-arrow menu-icon"></span>{% endif %}
+                    <ul class="megaMenu-sub-submenu">
+                    {% for third_link in sub_sub_link.links %}
+                      <li><a href="{{ third_link.url }}">{{ third_link.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                {% else %}
+                  <div class="megaMenu-sublink-item"><a href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a></div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      {% if column_position == 'last_column' %}
+        {% if column_title != blank or column_text != blank or column_image != blank %}
+          {% include 'mega-menu-custom' %}
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+
+  {% if mega_text != blank %}
+    <div class="megaMenu-banner">
+      {% if mega_text_url != blank %}
+        <a href="{{ mega_text_url }}">
+      {% endif %}
+        <p>{{ mega_text }}<p>
+      {% if mega_text_url != blank %}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>

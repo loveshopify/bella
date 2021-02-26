@@ -1,0 +1,76 @@
+{% if type == 'block' %}
+  {% assign image_stretch = block.settings.image_stretch %}
+  {% assign image = block.settings.image %}
+  {% assign title = block.settings.title %}
+  {% assign subtext = block.settings.subtext %}
+  {% assign text_position = block.settings.text_position %}
+  {% assign text_align = block.settings.text_align %}
+  {% assign button_label = block.settings.button_label %}
+  {% assign link = block.settings.link %}
+  {% assign enable_padding = block.settings.enable_padding %}
+{% else %}
+  {% assign image_stretch = section.settings.image_stretch %}
+  {% assign image = section.settings.image %}
+  {% assign title = section.settings.title %}
+  {% assign subtext = section.settings.subtext %}
+  {% assign text_position = section.settings.text_position %}
+  {% assign text_align = section.settings.text_align %}
+  {% assign button_label = section.settings.button_label %}
+  {% assign link = section.settings.link %}
+  {% assign enable_padding = section.settings.enable_padding %}
+{% endif %}
+
+<section class="{% if image_stretch == false %}container wide_display--false{% endif %} {% if enable_padding == true %}enable_padding--true{% endif %}">
+  <div class="slider flexslider {% if image_stretch == false %}sixteen columns{% endif %}">
+    <ul class="slides">
+      <li>
+        {% if link != blank %}
+          <a href="{{ link }}">
+        {% endif %}
+        {% if image != nil %}
+          <img  src="{{ image | img_url: '300x' }}"
+                alt="{{ image.alt | escape }}"
+                class="lazyload lazyload--fade-in"
+                sizes="100vw"
+                srcset="  {{ image | img_url: '2048x' }} 2048w,
+                          {{ image | img_url: '1600x' }} 1600w,
+                          {{ image | img_url: '1200x' }} 1200w,
+                          {{ image | img_url: '1000x' }} 1000w,
+                          {{ image | img_url: '800x' }} 800w,
+                          {{ image | img_url: '600x' }} 600w,
+                          {{ image | img_url: '400x' }} 400w"
+          />
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--banner' }}
+        {% endif %}
+
+        {% if link != blank %}
+          </a>
+        {% endif %}
+        {% if image != blank or title != blank or subtext != blank or button_label != blank %}
+          <div class="flex-caption">
+            <div class="container">
+              <div class="columns {% if text_position == 'left' %} eight offset-by-one {% elsif text_position == 'right' %} seven offset-by-eight {% else %} ten offset-by-three {% endif %} text-align--{{ text_align }}">
+                {% if title != blank %}
+                  <h1 class="headline">
+                    {{ title | escape }}
+                  </h1>
+                {% endif %}
+                {% if subtext != blank %}
+                  <div class="subtitle">
+                    {{ subtext }}
+                  </div>
+                {% endif %}
+                {% if button_label != blank %}
+                  <a href="{{ link }}" class="action_button">
+                    {{ button_label | escape }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</section>

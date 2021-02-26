@@ -1,0 +1,65 @@
+{% include 'include-featured-product' %}
+
+{% schema %}
+{
+  "name": "Featured product",
+  "class": "featured-product-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured product"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "frontpage_display_description",
+      "label": "Show product description",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "grid_text_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Dynamic checkout button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_button",
+      "label": "Show dynamic checkout button",
+      "default": true,
+      "info": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+    }
+  ],
+  "presets": [{
+    "name": "Featured product",
+    "category": "Product",
+    "settings": {
+    }
+  }]
+}
+{% endschema %}

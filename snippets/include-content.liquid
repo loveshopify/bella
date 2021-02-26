@@ -1,0 +1,17 @@
+{% if type == 'block' %}
+  {% assign content_page = block.settings.content_page %}
+{% else %}
+  {% assign content_page = section.settings.content_page %}
+{% endif %}
+
+<div class="container">
+  <div class="sixteen columns">
+    <div class="homepage_content section clearfix trim-last-paragraph">
+      {% if content_page != blank %}
+        {% include 'page-multi-column', content: pages[content_page].content %}
+      {% else %}
+        {{ 'homepage.onboarding.no_content' | t }}
+      {% endif %}
+    </div>
+  </div>
+</div>

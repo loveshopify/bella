@@ -1,0 +1,34 @@
+{% comment %}
+  Snippet can be used in section or block
+  eg. {% include 'include-divider' %}
+{% endcomment %}
+
+{% comment %}Assign object as block or section{% endcomment %}
+{% if type == 'block' %}
+  {% assign object = block %}
+{% else %}
+  {% assign object = section %}
+{% endif %}
+
+{% assign id = object.id %}
+
+{% assign divider_border = object.settings.divider_border %}
+{% assign divider_spacing = object.settings.divider_spacing %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+  .divider {
+    margin-top: {{ divider_spacing }}px;
+    margin-bottom: {{ divider_spacing }}px;
+  }
+{%- endcapture -%}
+
+{% style %}
+  {% include 'css-loop', css: section_css, id: id %}
+{% endstyle %}
+
+<div class="container">
+  <div class="sixteen columns">
+    <hr class="divider {% if divider_border %}divider--active{% endif %}">
+  </div>
+</div>

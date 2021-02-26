@@ -1,0 +1,81 @@
+{% comment %}
+** Registration template - default view **
+{% endcomment %}
+
+<section class="registration">
+    <div class="sixteen columns">
+    <div class="section clearfix">
+        <h1>{{ 'customer.register.title' | t }}</h1>
+    </div>
+    </div>
+
+    <div class="section clearfix">  
+    <div class="eight columns offset-by-four">
+
+        <div id="customer">
+        <!-- Create Customer -->
+        <div id="create-customer">
+
+            {% if section.settings.richtext != blank %}
+                <div class="richtext">{{ section.settings.richtext }}</div>
+            {% endif %}
+
+            {% form 'create_customer' %}
+            {{ form.errors | default_errors }}
+
+            <div id="first_name" class="clearfix large_form">
+                <label for="first_name" class="login">{{ 'customer.register.first_name' | t }}</label>
+                <input type="text" value="" name="customer[first_name]" id="first_name" class="large" size="30" />
+            </div>
+
+            <div id="last_name" class="clearfix large_form">
+                <label for="last_name" class="login">{{ 'customer.register.last_name' | t }}</label>
+                <input type="text" value="" name="customer[last_name]" id="last_name" class="large" size="30" />
+            </div>
+
+            <div id="email" class="clearfix large_form">
+                <label for="email" class="login">{{ 'customer.register.email' | t }}</label>
+                <input type="email" value="" name="customer[email]" id="email" class="large" size="30" />
+            </div>
+
+            <div id="password" class="clearfix large_form">
+                <label for="password" class="login">{{ 'customer.register.password' | t }}</label>
+                <input type="password" value="" name="customer[password]" id="password" class="large password" size="30" />
+            </div>
+
+            <div class="acceptsMarketing">
+               <input type="checkbox" id="customer[accepts_marketing]" name="customer[accepts_marketing]">
+               <label for="customer[accepts_marketing]">{{ section.settings.accepts_marketing_richtext }}</label>
+            </div>
+
+            <p class="action_bottom">
+                <input class="btn action_button" type="submit" value="{{ 'customer.register.sign_up' | t }}" />
+                <span class="note">{{ 'customer.register.or' | t }} <a href="{{ shop.url }}">{{ 'customer.register.cancel' | t }}</a></span>
+            </p>
+
+            {% endform %}
+        </div><!-- /#create-customer -->
+        </div>
+    </div>
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Register",
+    "class": "registration",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "richtext",
+        "label": "Text"
+      },
+      {
+        "type": "richtext",
+        "id": "accepts_marketing_richtext",
+        "label": "Accepts marketing text",
+        "default": "<p>Subscribe to our newsletter?</p>"
+      }
+    ]
+  }
+{% endschema %}

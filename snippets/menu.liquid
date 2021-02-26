@@ -1,0 +1,47 @@
+{% if type == 'mega' %}
+
+  <li tabindex="0" class="megaMenu-dropdown sub-menu js-megaMenu-dropdown {% if link.url == 'http://' or link.url == '' or link.url == '/' or link.url == 'https://' or link.url == '#' %} parent-link--false {% else %} parent-link--true{% endif %}" aria-haspopup="true" aria-expanded="false">
+    <a class="sub-menu--link {% if link.active or link.child_active %}active{% endif %}" {% unless link.url == 'http://' or link.url == '' or link.url == '/' or link.url == 'https://' or link.url == '#' %}href="{{ link.url }}" {% endunless %}>
+      {{ link.title }}<span class="icon-down-arrow arrow menu-icon"></span>
+    </a>
+    <span class="icon-right-arrow arrow mega-mobile-arrow menu-icon"></span>
+  </li>
+  {% include 'mega-menu' %}
+
+{% else %}
+
+  {% if link.links == blank %}
+    <li tabindex="0" aria-expanded="false">
+      <a href="{{ link.url }}" {% if link.active %}class="active"{% endif %}>{{ link.title }}</a>
+    </li>
+  {% else %}
+    <li tabindex="0" class="dropdown sub-menu" aria-haspopup="true" aria-expanded="false">
+      <a class="sub-menu--link {% if link.url == 'http://' or link.url == '' or link.url == '/' or link.url == 'https://' or link.url == '#' %}
+          slicknav_item {% if link.active or link.child_active %}active{% endif %}
+        {% else %}
+          {% if link.active or link.child_active %}active{% endif %}{% endif %}" href="{{ link.url }}"
+        " >{{ link.title }}&nbsp;<span class="icon-down-arrow arrow menu-icon"></span></a>
+      <ul class="animated fadeIn submenu_list">
+        {% for sub_link in link.links %}
+          {% if sub_link.links == blank %}
+            <li><a href="{{ sub_link.url }}">{{ sub_link.title }}</a></li>
+          {% else %}
+            <li class="sub-menu" aria-haspopup="true" aria-expanded="false">
+              <a {% if sub_link.url == 'http://' or sub_link.url == '' or sub_link.url == '/' or sub_link.url == 'https://' or sub_link.url == '#' %}
+                  class="slicknav_item {% if sub_link.active or sub_link.child_active %}active{% endif %}"
+                {% else %}
+                  class="{% if sub_link.active or sub_link.child_active %}active{% endif %}" href="{{ sub_link.url }}"
+                {% endif %}>{{ sub_link.title }}&nbsp;<span class="icon-right-arrow arrow menu-icon"></span></a>
+              <ul class="animated fadeIn sub_submenu_list">
+                {% for sub_sub_link in sub_link.links %}
+                  <li><a href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </li>
+  {% endif %}
+
+{% endif %}

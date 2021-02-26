@@ -1,0 +1,276 @@
+{% paginate collection.products by section.settings.pagination_limit %}
+
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      <h1><a href="{{ collection.url }}" title="{{ collection.title | escape }}">{{ collection.title }}</a></h1>
+
+      {% if section.settings.collection_breadcrumb %}
+      <div class="breadcrumb eight columns alpha">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@id": "{{ shop.url }}",
+                "name": "{{ 'general.breadcrumbs.home' | t }}"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@id": "{{ shop.url }}/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}",
+                "name": "{{ collection.title }}"
+              }
+            }
+            {% if current_tags %}
+              {% for tag in current_tags %}
+                {% unless tag contains 'meta-' %}
+                  ,
+                  {
+                    "@type": "ListItem",
+                    "position": {{ forloop.index | plus: 2 }},
+                    "item": {
+                      "@id": "{{ shop.url }}/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}",
+                      "name": "{{ tag }}"
+                    }
+                  }
+                {% endunless %}
+              {% endfor %}
+            {% endif %}
+          ]
+        }
+        </script>
+
+        <a href="{{ shop.url }}" title="{{ shop.name | escape }}">
+          <span>{{ 'general.breadcrumbs.home' | t }}</span>
+        </a>&nbsp;<span class="icon-right-arrow"></span>
+        <a href="{{ collection.url }}" title="{{ collection.title | escape }}">
+          <span>{{ collection.title }}</span>
+        </a>
+
+        {% if current_tags %}
+          {% for tag in current_tags %}
+            <span class="icon-right-arrow"></span>
+            <a href="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}" title="{{ tag | escape }}"><span>{{ tag }}</span></a>
+          {% endfor %}
+        {% endif %}
+
+        {% if paginate.pages != 0 %}
+          <span class="icon-right-arrow"></span> {{ 'general.breadcrumbs.page' | t: current_page: paginate.current_page, pages: paginate.pages }}
+        {% endif %}
+      </div>
+      {% endif %}
+
+
+      {% if collection.handle != blank and collection.products_count > 0 %}
+      <div class="eight columns section_select omega {% if settings.display_collection_title == false %}offset-by-eight{% endif %}">
+        {% if section.settings.collection_tags %}
+          <div class="filter_wrap">
+{%- for tag in collection.all_tags -%}
+{%- if tag contains '_HIDDEN_PRODUCT' -%}{%- continue -%}
+{%- else -%}{%- assign first_visible_index = forloop.index -%}{%- break -%}
+{%- endif -%}
+{%- endfor -%}
+            {% for tag in collection.all_tags %}
+{%- if tag contains '_HIDDEN_PRODUCT' -%}{%- continue -%}{%- endif -%}
+{%- if forloop.index == first_visible_index -%}
+                <label for="tag_filter" class="inline">{{ 'collections.sorting.filter' | t }}: </label>
+                <select name="tag_filter" id="tag_filter">
+                  <option {% unless current_tags %}selected="selected"{% endunless %} value="{% if collection.handle == "all" %}/collections/all{% else %}{{ collection.url }}{% endif %}">{{ 'collections.general.all_collection_title' | t: title: collection.title }}</option>
+              {% endif %}
+
+              {% unless tag contains 'meta-' %}
+                <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</option>
+              {% endunless %}
+
+              {% if forloop.last %}
+                </select>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if section.settings.collection_sort %}
+          <div class="filter_wrap">
+            <label for="sort-by" class="inline">{{ 'collections.sorting.title' | t }}: </label>
+            <select class="sort_by" id="sort-by" data-default-sort="{{ collection.sort_by | default: collection.default_sort_by  }}">
+              <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+              <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+              <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+              <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+              <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+              <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+              <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+              <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+            </select>
+          </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if collection.description != blank %}
+        <div class="feature_text">
+          {{ collection.description }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% comment %}Check to see if sidebar should be enabled{% endcomment %}
+  {% if section.blocks.size > 0 %}
+    {% assign sidebar = true %}
+  {% else %}
+    {% assign sidebar = false %}
+  {% endif %}
+
+  {% if sidebar %}
+    {% include 'sidebar' %}
+    <div class="twelve columns">
+  {% else %}
+    <div class="sixteen columns">
+  {% endif %}
+
+  {% if collection.products.size == 0 %}
+    <div class="center">
+      <div class="section clearfix">
+        <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
+      </div>
+    </div>
+  {% else %}
+    {% assign products = collection.products %}
+    {% assign products_per_row = section.settings.products_per_row %}
+    {% include 'product-loop', sidebar: sidebar %}
+  {% endif %}
+  </div>
+  {% include 'pagination', sidebar: sidebar %}
+{% endpaginate %}
+
+{% schema %}
+
+{
+  "name": "Collection",
+  "class": "collection-template-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "collection_breadcrumb",
+      "label": "Show breadcrumb links",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_sort",
+      "label": "Show collection filter"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_tags",
+      "label": "Show tag filter"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "pagination_limit",
+      "label": "Products per page",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "paragraph",
+      "content": "Create sidebar by adding content blocks."
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle",
+      "label": "Toggle sidebar content",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_by_collection",
+      "name": "Collection list",
+      "limit": 1
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "custom_menu_linklist",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "content_page",
+          "label": "Page"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_tag",
+      "name": "Tag list",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for special announcements or general information.</p>"
+        }
+      ]
+    },
+    {
+      "type": "filter_by_type",
+      "name": "Type list",
+      "limit": 1
+    },
+    {
+      "type": "filter_by_vendor",
+      "name": "Vendor list",
+      "limit": 1
+    }
+  ]
+}
+
+{% endschema %}

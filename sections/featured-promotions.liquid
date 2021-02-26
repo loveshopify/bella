@@ -1,0 +1,146 @@
+{% if section.blocks.size > 0 %}
+  {% assign featured_promos_per_row = section.settings.featured_promos_per_row | minus: 0 %}
+  {% if section.settings.featured_promos_grid %}
+    {% assign featured_promos_grid = 'full_width' %}
+  {% else %}
+    {% assign featured_promos_grid = 'standard' %}
+  {% endif %}
+  {% assign title_on_image = section.settings.feature_title_on_image_enabled %}
+
+  <div class="container promotions-grid-{{featured_promos_grid}}">
+    <div id="js-featured-promotions" class="featured-promotions promo-per-row-{{featured_promos_per_row}} clearfix">
+        {% for block in section.blocks %}
+          <figure {{ block.shopify_attributes }} class="feature-section section-{{ forloop.index }} promo-{{ forloop.index }}" >
+            {% if block.settings.image %}
+              <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}>
+                <img  src="{{ block.settings.image | img_url: '300x' }}"
+                      alt="{{ block.settings.image.alt | escape }}"
+                      class="lazyload lazyload--fade-in {% if section.settings.rounded_image != blank %}rounded{%endif %}"
+                      data-sizes="auto"
+                      data-src="{{ block.settings.image | img_url: '1400x' }}"
+                      data-srcset="  {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                {{ block.settings.image | img_url: '1600x' }} 1600w,
+                                {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                {{ block.settings.image | img_url: '800x' }} 800w,
+                                {{ block.settings.image | img_url: '600x' }} 600w,
+                                {{ block.settings.image | img_url: '400x' }} 400w"
+                       />
+                </a>
+            {% else %}
+              {% capture i %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+              {{ 'collection-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+            {% endif %}
+            <figcaption class="feature-overlay">
+                <div class="feature-wrap">
+                  {% if block.settings.title != blank %}
+                    <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}>
+                      <h2 class="title">{{ block.settings.title | escape}}</h2>
+                    </a>
+                  {% endif %}
+                  <div class="feature-details">
+                    {% if block.settings.text != blank %}
+                      <span class="description">{{ block.settings.text }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+            </figcaption>
+          </figure>
+        {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Featured promotions",
+  "class": "featured-promotions-section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "featured_promos_grid",
+      "label": "Wide display"
+    },
+    {
+      "type": "checkbox",
+      "id": "rounded_image",
+      "label": "Rounded images"
+    },
+    {
+      "type": "range",
+      "id": "featured_promos_per_row",
+      "label": "Promotions per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Promotion",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "800 x 800px recommended"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Featured promotions",
+    "category": "Image",
+    "settings": {
+      "featured_promos_grid": "standard"
+    },
+    "blocks": [
+      {
+        "type": "image",
+        "settings": {
+          "image": "",
+          "link": "",
+          "title": "",
+          "text": ""
+        }
+      },
+      {
+        "type": "image",
+        "settings": {
+          "image": "",
+          "link": "",
+          "title": "",
+          "text": ""
+        }
+      },
+      {
+        "type": "image",
+        "settings": {
+          "image": "",
+          "link": "",
+          "title": "",
+          "text": ""
+        }
+      }
+    ]
+  }]
+}
+{% endschema %}

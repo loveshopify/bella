@@ -1,0 +1,151 @@
+<div class="sixteen columns">
+  <div class="section clearfix">
+    <h1>{{ 'customer.login.title' | t }}</h1>
+  </div>
+</div>
+
+<div class="section clearfix">  
+  <div class="seven columns">
+
+    <div class="note form-success" id="resetSuccess" style="display:none;">
+      {{ 'customer.recover_password.success' | t }}
+    </div>
+
+    <div id="customer">
+      {% form 'customer_login' %}
+        <h4>{{ 'customer.login.returning_customers' | t }}</h4>
+        {{ form.errors | default_errors }}
+
+        <div id="login_email" class="clearfix large_form">
+          <label for="customer_email" class="login">{{ 'customer.login.email' | t }}</label>
+          <input type="email" value="" name="customer[email]" id="customer_email" class="large" size="30"  autocorrect="off" autocapitalize="off" />
+        </div>
+
+        {% if form.password_needed %}
+          {% comment %}
+            Customer Account Login
+          {% endcomment %}
+
+          <div id="login_password" class="clearfix large_form">
+            <span id="forgot_password" class="right">
+              <em><a href="#" onclick="showRecoverPasswordForm()">{{ 'customer.login.forgot_password' | t }}</a></em>
+            </span>
+
+            <label for="customer_password" class="login">{{ 'customer.login.password' | t }}</label>
+            <input type="password" value="" name="customer[password]" id="customer_password" class="large password" size="16" />
+          </div>
+
+        {% endif %}
+
+        <p>
+          <input class="btn action_button" type="submit" value="{{ 'customer.login.sign_in' | t }}" />
+        </p>
+      {% endform %}
+    </div>
+    
+    <div id="recover-password" style='display:none'>
+        <h4 class="title">{{ 'customer.recover_password.title' | t }}</h4>
+
+      {% form 'recover_customer_password' %}
+        {{ form.errors | default_errors }}
+        
+        {% if form.posted_successfully? %}
+          {% assign reset_success = true %}
+        {% endif %}
+
+        <div id="recover_email" class="clearfix large_form">
+          <label for="email" class="large">{{ 'customer.recover_password.email' | t }}</label>
+          <input type="email" value="" size="30" name="email" id="recover-email" class="large" autocorrect="off" autocapitalize="off" />
+        </div>
+        
+        <p>
+          <em class="note">{{ 'customer.recover_password.subtext' | t }}</em>
+        </p>
+        
+        <p class="action_bottom">
+          <input class="btn action_button" type="submit" value="{{ 'customer.recover_password.submit' | t }}" />
+          <span class="note">{{ 'customer.recover_password.or' | t }} <a href="#" onclick="hideRecoverPasswordForm()">{{ 'customer.recover_password.cancel' | t }}</a></span>
+        </p>
+      {% endform %}
+    </div>
+  </div>
+  
+  <div class="seven columns offset-by-two">
+
+    <h4>{{ 'customer.login.new_customers' | t }}</h4>
+    {% if shop.checkout.guest_login %}
+      {% form 'guest_login' %}
+          <input class="btn action_button" type="submit" value="{{ 'customer.login.guest_title_html' | t }}" />
+      {% endform %}    
+    {% else %}
+
+      {% form 'create_customer' %}
+        {{ form.errors | default_errors }}
+
+        <div id="first_name" class="clearfix large_form">
+          <label for="first_name" class="login">{{ 'customer.login.first_name' | t }}</label>
+          <input type="text" value="" name="customer[first_name]" id="first_name" class="large" size="30" />
+        </div>
+
+        <div id="last_name" class="clearfix large_form">
+          <label for="last_name" class="login">{{ 'customer.login.last_name' | t }}</label>
+          <input type="text" value="" name="customer[last_name]" id="last_name" class="large" size="30" />
+        </div>
+
+        <div id="email" class="clearfix large_form">
+          <label for="email" class="login">{{ 'customer.login.email' | t }}</label>
+          <input type="email" value="" name="customer[email]" id="email" class="large" size="30" autocorrect="off" autocapitalize="off" />
+        </div>
+
+        <div id="password" class="clearfix large_form">
+          <label for="password" class="login">{{ 'customer.login.password' | t }}</label>
+          <input type="password" value="" name="customer[password]" id="password" class="large password" size="30" />
+        </div>
+
+        {% if section.settings.richtext != blank %}
+          <div class="richtext">{{ section.settings.richtext }}</div>
+        {% endif %}
+
+        <div class="action_bottom">
+          <input class="action_button" type="submit" value="{{ 'customer.login.sign_up_html' | t }}" />
+        </div>
+      {% endform %}
+    {% endif %}
+  </div>
+</div>
+
+<script type="text/javascript">
+  function showRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'block';
+    document.getElementById('customer').style.display='none';
+    return false;
+  }
+
+  function hideRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'none';
+    document.getElementById('customer').style.display = 'block';
+    return false;
+  }
+
+  if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+
+  // reset_success is only true when the reset form is
+  {% if reset_success %}
+    showRecoverPasswordForm();
+  {% endif %}
+
+</script>
+
+{% schema %}
+  {
+    "name": "Login",
+    "class": "login",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "richtext",
+        "label": "Text"
+      }
+    ]
+  }
+{% endschema %}

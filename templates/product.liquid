@@ -1,0 +1,35 @@
+{% include 'bold-product' with product, hide_action: 'break' %}{% if bold_hidden_product %}{% break %}{% endif %}
+
+{% comment %}
+  The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+<div class="container {{ bold_hidden_product }}">
+
+  {% include 'product-structured-data' %}
+
+  <div class="breadcrumb__wrapper sixteen columns">
+    <div class="breadcrumb product_breadcrumb">
+      <span><a href="{{ shop.url }}" title="{{ shop.name | escape }}"><span>{{ 'general.breadcrumbs.home' | t }}</span></a></span>
+      <span class="icon-right-arrow"></span>
+      <span>
+        {% if collection %}
+          <a href="{{ collection.url }}" title="{{ collection.title | escape }}"><span>{{ collection.title }}</span></a>
+        {% else %}
+          <a href="/collections/all" title="{{ collections.all.title }}">{{ collections.all.title }}</a>
+        {% endif %}
+      </span>
+      <span class="icon-right-arrow"></span>
+      {{ product.title }}
+    </div>
+  </div>
+
+{% section 'product__sidebar' %}
+
+<div class="sixteen columns alpha omega" data-initial-width="sixteen" data-sidebar-width="twelve">
+  {% section 'product-template' %}
+
+  {% section 'product-recommendations' %}
+</div>
+
+</div>

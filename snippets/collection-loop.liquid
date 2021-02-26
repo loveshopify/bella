@@ -1,0 +1,78 @@
+{% assign collection_group_mobile = linklist.handle %}
+
+<div class="featured_collections">
+  {% for link in linklist.links %}
+
+    {% comment %}
+      This section supports linking to collections, products, pages, and blogs. It will use the first image found in the page content or blog article.
+    {% endcomment %}
+
+    {% assign link_item = link.object %}
+    {% assign link_image = '' %}
+    {% capture link_title %}{{ link.title | escape }}{% endcapture %}
+
+    {% if link.type == 'collection_link' %}
+      {% if link_item.image %}
+        {% assign link_image = link_item.image.src | collection_img_url: 'grande' %}
+      {% else %}
+        {% assign link_image = link_item.products.first.featured_image | product_img_url: 'grande' %}
+      {% endif %}
+    {% elsif link.type == 'product_link' %}
+      {% assign link_image = link_item.featured_image | product_img_url: 'grande' %}
+    {% elsif link.type == 'page_link' %}
+      {% if link_item.content contains "<img" %}
+        {% assign src = link_item.content | split: 'src="' %}
+        {% assign src = src[1] | split: '"' | first %}
+        {% if src %}
+          {% assign link_image = src %}
+        {% endif %}
+      {% endif %}
+    {% elsif link.type == 'blog_link' %}
+      {% if link_item.articles.first.image %}
+        {% assign link_image = link_item.articles.first.image | img_url: '1024x1024' %}
+      {% elsif link_item.articles.first.content contains "<img" %}
+        {% assign src = link_item.articles.first.content | split: 'src="' %}
+        {% assign src = src[1] | split: '"' | first %}
+        {% if src %}
+          {% assign link_image = src %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    {% if sidebar %}
+      <div class="{% if collections_per_row == 2 %}six columns {% cycle 'alpha', 'omega' %}{% elsif collections_per_row == 3 %}four columns {% cycle 'alpha', '', 'omega' %}{% else %}three columns {% cycle 'alpha', '', '', 'omega' %}{% endif %} {% cycle collection_group_mobile: 'even', 'odd' %} thumbnail price_align--{{ settings.collection_price_position }}">
+    {% else %}
+      <div class="{% if collections_per_row == 2 %}eight columns {% cycle 'alpha', 'omega' %}{% elsif collections_per_row == 3 %}one-third column {% cycle 'alpha', '', 'omega' %}{% else %}four columns {% cycle 'alpha', '', '', 'omega' %}{% endif %} {% cycle collection_group_mobile: 'even', 'odd' %} thumbnail price_align--{{ settings.collection_price_position }}">
+    {% endif %}
+      <a href="{{ link.url }}" title="{{ link_title }}">
+          {% if link_image != '' %}
+            <img src="{{ link_image }}"
+            class="lazyload"
+            alt="{{ link_title }}" />
+          {% endif %}
+          <div class="info">
+            <div class="info__text">
+              {% if section.settings.frontpage_collections_title %}
+                <span class="title">{{ link_title }}</span>
+              {% endif %}
+            </div>
+            {% if link.type == 'collection_link' and section.settings.collection_count %}
+              <span class="price">
+                {{ link_item.all_products_count }} {{ link_item.all_products_count | pluralize: 'item', 'items' }}
+              </span>
+            {% endif %}
+          
+          </div>
+      </a>
+    </div>
+
+    {% if collections_per_row == 2 %}
+      {% cycle '', '<br class="clear product_clear" />' %}
+    {% elsif collections_per_row == 3 %}
+      {% cycle '', '', '<br class="clear product_clear" />' %}
+    {% elsif collections_per_row == 4 %}
+      {% cycle '', '', '', '<br class="clear product_clear" />' %}
+    {% endif %}
+  {% endfor %}
+  <div class="clear"></div>
+</div>

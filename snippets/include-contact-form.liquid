@@ -1,0 +1,108 @@
+{% if type == 'block' %}
+  {% assign text_position = block.settings.contact_text_position %}
+  {% assign text_alignment = block.settings.contact_text_alignment %}
+  {% assign heading = block.settings.contact_heading %}
+  {% assign subheading = block.settings.contact_subheading %}
+  {% assign text_content = block.settings.contact_content %}
+  {% assign image = block.settings.contact_image %}
+{% else %}
+  {% assign image_position = section.settings.contact_image_position %}
+  {% assign image = section.settings.contact_image %}
+  {% assign newsletter_richtext = section.settings.newsletter_richtext %}
+{% endif %}
+
+<div class="contact-form__wrapper">
+  {% if type == 'block' %}
+    <div class="container">
+  {% endif %}
+    {% if heading %}
+      <h2 class="title center">{{ heading }}</h2>
+      <div class="feature_divider"></div>
+    {% endif %}
+    <div class="contact_form {% if text_position %} contact_text_position--{{ text_position }} {% endif %} {% if image %} contact_image_position--{{ image_position }} {% endif %} {% if type != 'block' %} clearfix {% endif %}">
+      {% if image != nil %}
+        <div class="eight columns contact_image">
+          <img  src="{{ image | img_url: '580x' }}"
+                alt="{{ image.alt | escape }}"
+                data-src="{{ image | img_url: '2048x' }}"
+                class="lazyload lazyload--fade-in"
+                data-sizes="auto"
+                data-srcset=" {{ image | img_url: '2048x' }} 2048w,
+                              {{ image | img_url: '1600x' }} 1600w,
+                              {{ image | img_url: '1200x' }} 1200w,
+                              {{ image | img_url: '1000x' }} 1000w,
+                              {{ image | img_url: '800x' }} 800w,
+                              {{ image | img_url: '600x' }} 600w,
+                              {{ image | img_url: '400x' }} 400w"
+                  />
+        </div>
+      {% endif %}
+      <div class="eight columns contact_content {% if text_alignment %} text-align--{{ text_alignment }} {% endif %}">
+        {% if subheading %}
+          <h3>{{ subheading }}</h3>
+        {% endif %}
+        {% if text_content %}
+          {{ text_content}}
+        {% endif %}
+        {% if type != 'block' %}
+          {% if page.content != blank %}
+            <div class="contact_text">
+              {{ page.content }}
+            </div>
+          {% endif %}
+          {% if newsletter_richtext %}
+            {{ newsletter_richtext }}
+          {% endif %}
+        {% endif %}
+    {% if type == 'block' %}
+      </div>
+      <div class="eight columns">
+    {% endif %}
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <p class="quote">{{ 'contact.form.post_success' | t }}</p>
+        {% endif %}
+
+        {% if form.errors %}
+          <p class="quote">{{ 'general.forms.post_error' | t }}</p>
+
+        {% assign message = 'contact.form.message' | t %}
+          <ul class="center">
+            {% for field in form.errors %}
+              {% if field == 'form' %}
+                <li>
+                  {{ form.errors.messages[field] }}
+                </li>
+              {% else %}
+                <li>
+                  {% assign field_name = field | replace: 'body', message %}
+                  {{ 'general.forms.post_field_error_html' | t: field: field_name, error: form.errors.messages[field] }}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <div class="four columns alpha">
+          {% assign name_attr = 'contact.form.name' | handle %}
+          <label for="contactFormName">{{ 'contact.form.name' | t }} <span class="red">*</span></label>
+          <input type="text" id="contactFormName" name="contact[{{ name_attr }}]" placeholder="{{ 'contact.form.name' | t }}" autocapitalize="words" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.name }}{% endif %}" required="required">
+        </div>
+        <div class="four columns omega">
+          <label for="contactFormEmail">{{ 'contact.form.email' | t }} <span class="red">*</span></label>
+          <input type="email" id="contactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required="required">
+        </div>
+
+        <label for="contactFormMessage">{{ 'contact.form.message' | t }} <span class="red">*</span></label>
+        <textarea rows="5" id="contactFormMessage" name="contact[body]" placeholder="{{ 'contact.form.message' | t }}" required="required">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+        <input type="submit" class="submit action_button" value="{{ 'contact.form.send' | t }}" />
+      {% endform %}
+    {% if type == 'block' %}
+      </div>
+    {% endif %}
+      </div>
+  {% if type == 'block' %}
+    </div>
+  {% endif %}
+</div>

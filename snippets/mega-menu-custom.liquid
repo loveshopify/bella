@@ -1,0 +1,50 @@
+<div class="megaMenu-column megaMenu-custom-column">
+  {% if column_title != blank %}
+    <h3 class="megaMenu-subtitle">
+      {% unless column_link == 'http://' or column_link == '' or column_link == '/' or column_link == 'https://' or column_link == '#' %}
+        <a href="{{ column_link }}">
+      {% endunless %}
+        {{ column_title }}
+      {% unless column_link == 'http://' or column_link == '' or column_link == '/' or column_link == 'https://' or column_link == '#' %}
+        </a>
+      {% endunless %}
+    </h3>
+  {% endif %}
+
+  {% unless column_link == 'http://' or column_link == '' or column_link == '/' or column_link == 'https://' or column_link == '#' %}
+    <a href="{{ column_link }}">
+  {% endunless %}
+
+  {% if column_image %}
+    <img  src="{{ column_image.src | img_url: '300x' }}"
+    class="lazyload lazyload--fade-in megaMenu-image"
+    alt="{{ column_image.alt }}"
+    style="max-width: {{- column_image.width -}}px;"
+    data-sizes="auto"
+    data-src="{{ column_image | img_url: '2048x' }}"
+    data-srcset=" {{ column_image | img_url: '2048x' }} 2048w,
+                  {{ column_image | img_url: '1600x' }} 1600w,
+                  {{ column_image | img_url: '1200x' }} 1200w,
+                  {{ column_image | img_url: '1000x' }} 1000w,
+                  {{ column_image | img_url: '800x' }} 800w,
+                  {{ column_image | img_url: '600x' }} 600w,
+                  {{ column_image | img_url: '400x' }} 400w"
+    />
+  {% endif %}
+
+  {% unless column_link == 'http://' or column_link == '' or column_link == '/' or column_link == 'https://' or column_link == '#' %}
+    </a>
+  {% endunless %}
+
+  <div class="megaMenu-text">
+    {% if column_text != blank %}
+      {% if column_link != blank %}
+        <a href="{{ column_link }}">
+      {% endif %}
+      <p>{{ column_text }}</p>
+      {% if column_link != blank %}
+        </a>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>

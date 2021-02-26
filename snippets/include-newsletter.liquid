@@ -1,0 +1,68 @@
+{% if type == 'block' %}
+  {% assign id = block.id %}
+  {% assign title = block.settings.title %}
+  {% assign subheading = block.settings.subheading %}
+  {% assign text_color = block.settings.text_color %}
+  {% assign background_color = block.settings.background_color %}
+  {% assign use_border = block.settings.use_border %}
+  {% assign nav_border = block.settings.nav_border %}
+{% else %}
+  {% assign id = section.id %}
+  {% assign title = section.settings.title %}
+  {% assign subheading = section.settings.subheading %}
+  {% assign text_color = section.settings.text_color %}
+  {% assign background_color = section.settings.background_color %}
+  {% assign use_border = section.settings.use_border %}
+  {% assign nav_border = section.settings.nav_border %}
+{% endif %}
+
+<div class="homepage-newsletter container">
+  <div class="sixteen columns center">
+    <h2>{{ title }}</h2>
+    {% if section.settings.newsletter_richtext != blank %}
+      <div class="newsletter-text">{{ section.settings.newsletter_richtext }}</div>
+    {% endif %}
+  </div>
+  <div class="sixteen columns center">
+    {% include 'newsletter' %}
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ id }} h2,
+  #shopify-section-{{ id }} p {
+    color: {{ text_color }};
+  }
+  {% if use_border == blank %}
+    #shopify-section-{{ id }} {
+      background-color: {{ background_color }};
+    }
+  {% endif %}
+
+  {% if use_border %}
+    #shopify-section-{{ id }} {
+      margin: 30px 0;
+    }
+    {% if nav_border == 'double' %}
+      #shopify-section-{{ id }} .container {
+        border-top: double {{ settings.border_color }};
+        border-bottom: double {{ settings.border_color }};
+      }
+    {% elsif nav_border == 'dashed' %}
+      #shopify-section-{{ id }} .container {
+        border-top: 1px dashed {{ settings.border_color }};
+        border-bottom: 1px dashed {{ settings.border_color }};
+      }
+    {% elsif nav_border == 'dotted' %}
+      #shopify-section-{{ id }} .container {
+        border-top: 1px dotted {{ settings.border_color }};
+        border-bottom: 1px dotted {{ settings.border_color }};
+      }
+    {% elsif nav_border == 'solid' %}
+      #shopify-section-{{ id }} .container {
+        border-top: 1px solid {{ settings.border_color }};
+        border-bottom: 1px solid {{ settings.border_color }};
+      }
+    {% endif %}
+  {% endif %}
+</style>

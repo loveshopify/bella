@@ -1,0 +1,232 @@
+
+
+{% if section.settings.image %}
+  <div class="faqTitle slider flexslider header_banner slideshow_article_darken--{{section.settings.slideshow_post_darken}}">
+    <ul class="slides">
+      <li>
+        <img  src="{{ section.settings.image | img_url: '300x' }}"
+              alt="{% if section.settings.image.alt != blank %}{{ section.settings.image.alt }}{% else %}{{ section.settings.title | escape }}{% endif %}"
+              class="lazyload lazyload--fade-in banner_image"
+              sizes="100vw"
+              srcset="  {{ section.settings.image | img_url: '2048x' }} 2048w,
+                        {{ section.settings.image | img_url: '1600x' }} 1600w,
+                        {{ section.settings.image | img_url: '1200x' }} 1200w,
+                        {{ section.settings.image | img_url: '1000x' }} 1000w,
+                        {{ section.settings.image | img_url: '800x' }} 800w,
+                        {{ section.settings.image | img_url: '600x' }} 600w,
+                        {{ section.settings.image | img_url: '400x' }} 400w"
+               />
+
+        <div class="flex-caption">
+          <div class="container">
+            <div class="ten offset-by-three columns center">
+              <h1 class="headline">{{ page.title }}</h1>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+{% else %}
+  <div class="container">
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        <h1>{{ page.title }}</h1>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if page.content != '' %}
+<div class="container">
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="container">
+  <div class="faqContent {% if section.settings.page_image %}faqImage--true{% endif %} faqImage--{{ section.settings.image_alignment }}">
+
+    <div class="faqColumn">
+      {% if section.blocks.size > 0 %}
+        <dl class="faqAccordion">
+          {% for block in section.blocks %}
+            {% if block.type == "heading" and block.settings.heading != blank %}
+              <h2 class="faq-heading">{{ block.settings.heading }}</h2>
+            {% endif %}
+            {% if block.settings.title != blank %}
+              <dt><button type="button" aria-controls="panel-{{ block.id }}" aria-expanded="true"><span class="icon-plus"></span>{{ block.settings.title }}</button></dt>
+              <dd id="panel-{{ block.id }}" aria-hidden="false">
+                {{ block.settings.subtitle }}
+              </dd>
+            {% endif %}
+          {% endfor %}
+        </dl>
+      {% endif %}
+    </div>
+
+    {% if section.settings.page_image %}
+      <div class="faqColumn">
+        <img  src="{{ section.settings.page_image.src | img_url: '300x' }}"
+        class="lazyload lazyload--fade-in"
+        alt="{{ section.settings.page_image.alt }}"
+        style="max-width: {{- section.settings.page_image.width -}}px;"
+        data-sizes="auto"
+        data-src="{{ section.settings.page_image | img_url: '2048x' }}"
+        data-srcset=" {{ section.settings.page_image | img_url: '2048x' }} 2048w,
+                      {{ section.settings.page_image | img_url: '1600x' }} 1600w,
+                      {{ section.settings.page_image | img_url: '1200x' }} 1200w,
+                      {{ section.settings.page_image | img_url: '1000x' }} 1000w,
+                      {{ section.settings.page_image | img_url: '800x' }} 800w,
+                      {{ section.settings.page_image | img_url: '600x' }} 600w,
+                      {{ section.settings.page_image | img_url: '400x' }} 400w"
+        />
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "FAQ",
+    "class": "faq-template-section image-with-text-overlay-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Banner"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "1600 x 600px recommended"
+      },
+      {
+        "type": "checkbox",
+        "id": "slideshow_post_darken",
+        "label": "Darken banner image",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "FAQ image"
+      },
+      {
+        "type": "image_picker",
+        "id": "page_image",
+        "label": "Image",
+        "info": "1000 x 1000px recommended"
+      },
+      {
+        "type": "select",
+        "id": "image_alignment",
+        "label": "Position",
+        "default": "right",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Heading",
+        "type": "heading",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Title"
+          }
+        ]
+      },
+      {
+        "name": "Frequently asked question",
+        "type": "Content",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Question"
+          },
+          {
+            "type": "richtext",
+            "id": "subtitle",
+            "label": "Answer"
+          }
+        ]
+      }
+    ],
+    "default": {
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Section"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Section"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        },
+        {
+          "type": "Content",
+          "settings": {
+            "title": "Title",
+            "subtitle": "<p>Include a helpful and informative answer to the frequently asked question here.</p>"
+          }
+        }
+      ]
+    }
+  }
+{% endschema %}

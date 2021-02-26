@@ -1,0 +1,58 @@
+{% if type == 'block' %}
+  {% assign image = block.settings.image %}
+  {% assign layout = block.settings.layout %}
+  {% assign align = block.settings.align %}
+  {% assign title = block.settings.title %}
+  {% assign text = block.settings.text %}
+  {% assign button_label = block.settings.button_label %}
+  {% assign button_link = block.settings.button_link %}
+{% else %}
+  {% assign image = section.settings.image %}
+  {% assign layout = section.settings.layout %}
+  {% assign align = section.settings.align %}
+  {% assign title = section.settings.title %}
+  {% assign text = section.settings.text %}
+  {% assign button_label = section.settings.button_label %}
+  {% assign button_link = section.settings.button_link %}
+{% endif %}
+
+
+<div class="container image-with-text flex-container image-position--{{ layout }}">
+    <div class="eight columns image_column">
+      {% if image != blank %}
+        <img  src="{{ image | img_url: '300x' }}"
+              alt="{{ image.alt | escape }}"
+              data-src="{{ image | img_url: '2048x' }}"
+              class="lazyload lazyload--fade-in"
+              data-sizes="auto"
+              data-srcset=" {{ image | img_url: '2048x' }} 2048w,
+                            {{ image | img_url: '1600x' }} 1600w,
+                            {{ image | img_url: '1200x' }} 1200w,
+                            {{ image | img_url: '1000x' }} 1000w,
+                            {{ image | img_url: '800x' }} 800w,
+                            {{ image | img_url: '600x' }} 600w,
+                            {{ image | img_url: '400x' }} 400w"
+              />
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+
+  <div class="eight columns content_column align_{{ align }}">
+    {% if title != blank %}
+      <h3 class="align_{{ align }}">
+        {{ title | escape }}
+      </h3>
+    {% endif %}
+    {% if text != blank %}
+      <span class="trim-last-paragraph">
+        {{ text }}
+      </span>
+    {% endif %}
+    {% if button_label != blank and button_link != blank %}
+      <a href="{{ button_link }}" class="action_button">
+        {{ button_label | escape }}
+      </a>
+    {% endif %}
+  </div>
+</div>

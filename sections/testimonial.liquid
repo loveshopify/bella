@@ -1,0 +1,151 @@
+<div class="testimonial-container container" data-section-id="{{ section.id }}">
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      {% if section.settings.title != blank %}
+        <h2 class="section-header home text-align--center">
+          {{ section.settings.title | escape }}
+        </h2>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+
+          <div class="testimonial-block {% if section.settings.testimonials_per_row == 1 %}sixteen columns{% elsif section.settings.testimonials_per_row == 2 %}eight columns {% cycle 'alpha', 'omega' %}{% else %}one-third column {% cycle 'alpha', '', 'omega' %}{% endif %}" {{ block.shopify_attributes }}>
+
+            {% if block.settings.image != blank %}
+              <div class="testimonial-image {% if section.settings.rounded_image != blank %}rounded{% endif %}">
+                <img  src="{{ block.settings.image | img_url: '300x' }}"
+                      alt="{{ block.settings.image.alt }}"
+                      data-src="{{ block.settings.image | img_url: '2048x' }}"
+                      class="lazyload lazyload--fade-in testimonial__image"
+                      data-sizes="auto"
+                      data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
+                                    {{ block.settings.image | img_url: '1600x' }} 1600w,
+                                    {{ block.settings.image | img_url: '1200x' }} 1200w,
+                                    {{ block.settings.image | img_url: '1000x' }} 1000w,
+                                    {{ block.settings.image | img_url: '800x' }} 800w,
+                                    {{ block.settings.image | img_url: '600x' }} 600w,
+                                    {{ block.settings.image | img_url: '400x' }} 400w"
+                />
+              </div>
+            {% endif %}
+
+            <div class="testimonial-block__text {% if block.settings.name == blank %}trim-last-paragraph{% endif %}">
+              {{ block.settings.testimonial }}
+            </div>
+
+            {% if block.settings.name != blank %}
+              <p class="trim-paragraph">
+                <span class="testimonial-dash">&mdash; </span>
+
+                {% if block.settings.site_link != blank %}
+                  <a href="{{ block.settings.site_link }}" target="_blank">
+                {% endif %}
+
+                <span class="name">
+                  {% if block.settings.site_link == blank %}<strong>{% endif %}
+                    {{ block.settings.name | escape }}
+                  {% if block.settings.site_link == blank %}</strong>{% endif %}
+                </span>
+
+                {% if block.settings.site_link != blank %}
+                  </a>
+                {% endif %}
+              </p>
+            {% endif %}
+          </div>
+
+          {% if section.settings.testimonials_per_row == 1 %}
+            {% cycle '', '<br class="clear" />' %}
+          {% elsif section.settings.testimonials_per_row == 2 %}
+            {% cycle '', '<br class="clear" />' %}
+          {% elsif section.settings.testimonials_per_row == 3 %}
+            {% cycle '', '', '<br class="clear" />' %}
+          {% endif %}
+
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonials",
+    "class": "testimonial-section",
+    "max_blocks": 12,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Testimonials"
+      },
+      {
+        "type": "checkbox",
+        "id": "rounded_image",
+        "label": "Rounded images",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "testimonials_per_row",
+        "label": "Testimonials per row",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 3
+      }
+    ],
+    "blocks": [
+      {
+        "type": "quote",
+        "name": "Testimonial",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Testimonial image",
+            "info": "400 x 400px recommended"
+          },
+          {
+            "type": "richtext",
+            "id": "testimonial",
+            "label": "Testimonial",
+            "default": "<p>Include some of your favorite customer quotes and feedback here as social proof, to build credibility and trust for your services and products.</p>"
+          },
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Customer name",
+            "info": "Optional",
+            "default": "John Doe"
+          },
+          {
+            "type": "url",
+            "id": "site_link",
+            "label": "Link",
+            "info": "Optional"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonials",
+        "category": "Text",
+        "blocks": [
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          },
+          {
+            "type": "quote"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

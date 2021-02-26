@@ -1,0 +1,53 @@
+{% if settings.newsletter_popup %}
+  <a id="newsletter" href="#target"></a>
+  <span style="display: none;">
+    <span id="target">
+      <div class="popup-container imagePosition--{{ settings.popup_image_position }} {% if settings.newsletter_popup_image == blank %}no-image{% endif %}">
+        {% if settings.newsletter_popup_image %}
+          <div class="popup-image">
+            <img src="{{ settings.newsletter_popup_image | img_url: '600x' }}" alt="{% if settings.newsletter_popup_image.alt != blank %}{{ settings.newsletter_popup_image.alt }}{% else %}{{ settings.newsletter_popup_title | escape }}{% endif %}" />
+          </div>
+        {% endif %}
+        <div class="popup-text">
+          {% if settings.newsletter_popup_title != blank %}
+            <p class="headline">
+              {{ settings.newsletter_popup_title | escape }}
+            </p>
+          {% endif %}
+
+          {% if settings.newsletter_popup_text != blank %}
+            {{ settings.newsletter_popup_text }}
+          {% endif %}
+
+          {% if settings.newsletter_popup_form %}
+            {% include 'newsletter' %}
+          {% endif %}
+        </div>
+      </div>
+    </span>
+  </span>
+
+  <script type="text/javascript">
+    function openNewsletterPopup() {
+      setTimeout( function() {
+        $('#newsletter').fancybox({height: 'auto', minHeight: 'auto', wrapCSS: 'newsletter_popup', padding: [0, 0, 0, 0], scrolling: false, minWidth: {{ settings.newsletter_popup_max_width }} });
+        $('#newsletter').trigger('click');
+      },
+      {% if settings.newsletter_popup_seconds != blank %}{{ settings.newsletter_popup_seconds }}{% else %}2{% endif %}*1000);
+    }
+
+    $(function() {
+      var popup = $.cookie('popup');
+      var cookie_enabled = {% if settings.newsletter_popup_days != blank and settings.newsletter_popup_days != "0" %}true{% else %}false{% endif %};
+
+      if (cookie_enabled && popup == 'open') {
+          return false;
+      } else if ({{ settings.newsletter_popup_mobile }} || $(window).width() > 768) {
+        openNewsletterPopup();
+      }
+      if (cookie_enabled) {
+        $.cookie('popup', 'open', { expires: {{ settings.newsletter_popup_days }} });
+      }
+    });
+  </script>
+{% endif %}

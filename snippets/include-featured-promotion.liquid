@@ -1,0 +1,163 @@
+{% assign featured_promos_per_row = block.settings.featured_promos_per_row | minus: 0 %}
+{% if block.settings.featured_promos_grid %}
+  {% assign featured_promos_grid = 'full_width' %}
+{% else %}
+  {% assign featured_promos_grid = 'standard' %}
+{% endif %}
+{% assign title_on_image = block.settings.feature_title_on_image_enabled %}
+
+<div class="container promotions-grid-{{featured_promos_grid}}">
+  <div id="js-featured-promotions" class="featured-promotions promo-per-row-{{featured_promos_per_row}} clearfix">
+
+    {% if featured_promos_per_row >= 2 %}
+      <figure {{ block.shopify_attributes }} class="feature-section section-1 promo-1" >
+        {% if block.settings.image_1 %}
+          <a {% if block.settings.link_1 != blank %}href="{{ block.settings.link_1 }}"{% endif %}>
+            <img  src="{{ block.settings.image_1 | img_url: '300x' }}"
+                  alt="{{ block.settings.image_1.alt | escape }}"
+                  class="lazyload lazyload--fade-in {% if block.settings.rounded_image != blank %}rounded{%endif %}"
+                  data-sizes="auto"
+                  data-src="{{ block.settings.image_1 | img_url: '1400x' }}"
+                  data-srcset="  {{ block.settings.image_1 | img_url: '2048x' }} 2048w,
+                            {{ block.settings.image_1 | img_url: '1600x' }} 1600w,
+                            {{ block.settings.image_1 | img_url: '1200x' }} 1200w,
+                            {{ block.settings.image_1 | img_url: '1000x' }} 1000w,
+                            {{ block.settings.image_1 | img_url: '800x' }} 800w,
+                            {{ block.settings.image_1 | img_url: '600x' }} 600w,
+                            {{ block.settings.image_1 | img_url: '400x' }} 400w"
+                    />
+            </a>
+        {% else %}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+        {% endif %}
+        <figcaption class="feature-overlay">
+            <div class="feature-wrap">
+              {% if block.settings.title_1 != blank %}
+                <a {% if block.settings.link_1 != blank %}href="{{ block.settings.link_1 }}"{% endif %}>
+                  <h2 class="title">{{ block.settings.title_1 | escape}}</h2>
+                </a>
+              {% endif %}
+              <div class="feature-details">
+                {% if block.settings.text_1 != blank %}
+                  <span class="description">{{ block.settings.text_1 }}</span>
+                {% endif %}
+              </div>
+            </div>
+        </figcaption>
+      </figure>
+
+      <figure {{ block.shopify_attributes }} class="feature-section section-2 promo-2" >
+        {% if block.settings.image_2 %}
+          <a {% if block.settings.link_2 != blank %}href="{{ block.settings.link_2 }}"{% endif %}>
+            <img  src="{{ block.settings.image_2 | img_url: '300x' }}"
+                  alt="{{ block.settings.image_2.alt | escape }}"
+                  class="lazyload lazyload--fade-in {% if block.settings.rounded_image != blank %}rounded{%endif %}"
+                  data-sizes="auto"
+                  data-src="{{ block.settings.image_2 | img_url: '1400x' }}"
+                  data-srcset="  {{ block.settings.image_2 | img_url: '2048x' }} 2048w,
+                            {{ block.settings.image_2 | img_url: '1600x' }} 1600w,
+                            {{ block.settings.image_2 | img_url: '1200x' }} 1200w,
+                            {{ block.settings.image_2 | img_url: '1000x' }} 1000w,
+                            {{ block.settings.image_2 | img_url: '800x' }} 800w,
+                            {{ block.settings.image_2 | img_url: '600x' }} 600w,
+                            {{ block.settings.image_2 | img_url: '400x' }} 400w"
+                    />
+            </a>
+        {% else %}
+          {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+        {% endif %}
+        <figcaption class="feature-overlay">
+            <div class="feature-wrap">
+              {% if block.settings.title_2 != blank %}
+                <a {% if block.settings.link_2 != blank %}href="{{ block.settings.link_2 }}"{% endif %}>
+                  <h2 class="title">{{ block.settings.title_2 | escape}}</h2>
+                </a>
+              {% endif %}
+              <div class="feature-details">
+                {% if block.settings.text_2 != blank %}
+                  <span class="description">{{ block.settings.text_2 }}</span>
+                {% endif %}
+              </div>
+            </div>
+        </figcaption>
+      </figure>
+    {% endif %}
+
+    {% if featured_promos_per_row >= 3 %}
+      <figure {{ block.shopify_attributes }} class="feature-section section-3 promo-3" >
+        {% if block.settings.image_3 %}
+          <a {% if block.settings.link_3 != blank %}href="{{ block.settings.link_3 }}"{% endif %}>
+            <img  src="{{ block.settings.image_3 | img_url: '300x' }}"
+                  alt="{{ block.settings.image_3.alt | escape }}"
+                  class="lazyload lazyload--fade-in {% if block.settings.rounded_image != blank %}rounded{%endif %}"
+                  data-sizes="auto"
+                  data-src="{{ block.settings.image_3 | img_url: '1400x' }}"
+                  data-srcset="  {{ block.settings.image_3 | img_url: '2048x' }} 2048w,
+                            {{ block.settings.image_3 | img_url: '1600x' }} 1600w,
+                            {{ block.settings.image_3 | img_url: '1200x' }} 1200w,
+                            {{ block.settings.image_3 | img_url: '1000x' }} 1000w,
+                            {{ block.settings.image_3 | img_url: '800x' }} 800w,
+                            {{ block.settings.image_3 | img_url: '600x' }} 600w,
+                            {{ block.settings.image_3 | img_url: '400x' }} 400w"
+                    />
+            </a>
+        {% else %}
+          {{ 'collection-3' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+        {% endif %}
+        <figcaption class="feature-overlay">
+            <div class="feature-wrap">
+              {% if block.settings.title_3 != blank %}
+                <a {% if block.settings.link_3 != blank %}href="{{ block.settings.link_3 }}"{% endif %}>
+                  <h2 class="title">{{ block.settings.title_3 | escape}}</h2>
+                </a>
+              {% endif %}
+              <div class="feature-details">
+                {% if block.settings.text_3 != blank %}
+                  <span class="description">{{ block.settings.text_3 }}</span>
+                {% endif %}
+              </div>
+            </div>
+        </figcaption>
+      </figure>
+    {% endif %}
+
+    {% if featured_promos_per_row >= 4 %}
+      <figure {{ block.shopify_attributes }} class="feature-section section-4 promo-4" >
+        {% if block.settings.image_4 %}
+          <a {% if block.settings.link_4 != blank %}href="{{ block.settings.link_4 }}"{% endif %}>
+            <img  src="{{ block.settings.image_4 | img_url: '300x' }}"
+                  alt="{{ block.settings.image_4.alt | escape }}"
+                  class="lazyload lazyload--fade-in {% if block.settings.rounded_image != blank %}rounded{%endif %}"
+                  data-sizes="auto"
+                  data-src="{{ block.settings.image_4 | img_url: '1400x' }}"
+                  data-srcset="  {{ block.settings.image_4 | img_url: '2048x' }} 2048w,
+                            {{ block.settings.image_4 | img_url: '1600x' }} 1600w,
+                            {{ block.settings.image_4 | img_url: '1200x' }} 1200w,
+                            {{ block.settings.image_4 | img_url: '1000x' }} 1000w,
+                            {{ block.settings.image_4 | img_url: '800x' }} 800w,
+                            {{ block.settings.image_4 | img_url: '600x' }} 600w,
+                            {{ block.settings.image_4 | img_url: '400x' }} 400w"
+                    />
+            </a>
+        {% else %}
+          {{ 'collection-4' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--promotions' }}
+        {% endif %}
+        <figcaption class="feature-overlay">
+            <div class="feature-wrap">
+              {% if block.settings.title_4 != blank %}
+                <a {% if block.settings.link_4 != blank %}href="{{ block.settings.link_4 }}"{% endif %}>
+                  <h2 class="title">{{ block.settings.title_4 | escape}}</h2>
+                </a>
+              {% endif %}
+              <div class="feature-details">
+                {% if block.settings.text_4 != blank %}
+                  <span class="description">{{ block.settings.text_4 }}</span>
+                {% endif %}
+              </div>
+            </div>
+        </figcaption>
+      </figure>
+    {% endif %}
+
+  </div>
+</div>
